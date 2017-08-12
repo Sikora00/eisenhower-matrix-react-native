@@ -12,8 +12,13 @@ import Note from './app/components/Note'
 export default class App extends React.Component {
 
     state = {
-        noteArray: [{'note': 'testnote1'}],
+        noteArray: [],
         noteText: '',
+    };
+
+    constructor(){
+        super();
+        this.pullNotes();
     }
 
     render() {
@@ -63,6 +68,29 @@ export default class App extends React.Component {
         this.state.noteArray.splice(key, 1);
         this.setState({noteArray: this.state.noteArray});
     }
+
+    pullNotes() {
+        fetch('http://192.168.0.14/eisenhower-matrix/web/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                alert(JSON.stringify(res));
+                res.forEach((note) => {
+                    this.state.noteArray.push({
+                        'date': note.date,
+                        'note': note.note,
+                    });
+                    this.setState({noteArray: this.state.noteArray});
+                });
+            })
+            .done();
+    }
+
 }
 
 const styles = StyleSheet.create({
