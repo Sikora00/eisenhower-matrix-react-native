@@ -81,7 +81,8 @@ const styles = StyleSheet.create({
         color: '#fff',
         padding: 20,
         backgroundColor: '#252525',
-        borderTopWidth: 2,
+        borderTopWidth: 10,
         borderTopColor: '#ededed',
+        paddingTop: 60,
     }
 });
