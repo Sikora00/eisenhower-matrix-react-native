@@ -7,30 +7,61 @@ import {
     ScrollView,
     TouchableOpacity
 } from 'react-native';
+import Note from './app/components/Note'
 
 export default class App extends React.Component {
+
+    state = {
+        noteArray: [{'note': 'testnote1'}],
+        noteText: '',
+    }
+
     render() {
+
+        let notes = this.state.noteArray.map((val, key) => {
+            return <Note key={key} keyval={key} val={val} deleteMethod={() => this.deleteNote(key)}/>
+        });
+
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
                     <Text style={styles.headerText}>= Noter -</Text>
                 </View>
 
-                <ScrollView style={styles.scrollContainer}></ScrollView>
+                <ScrollView style={styles.scrollContainer}>
+                    {notes}
+                </ScrollView>
 
                 <View style={styles.footer}/>
-                <TouchableOpacity style={styles.addButton}>
+                <TouchableOpacity onPress={this.addNote.bind(this)} style={styles.addButton}>
                     <Text style={styles.addButtonText}>+</Text>
                 </TouchableOpacity>
 
                 <TextInput style={styles.textInput}
+                           onChangeText={(noteText) => this.setState({noteText})} value={this.state.noteText}
                            placeholder='> note' placeholderTextColor='white' underlineColorAndroid='transparent'>
                 </TextInput>
 
             </View>
 
-
         );
+    }
+
+    addNote() {
+        if (this.state.noteText) {
+            var d = new Date();
+            this.state.noteArray.push({
+                'date': d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear(),
+                'note': this.state.noteText
+            });
+            this.setState({noteArray: this.state.noteArray});
+            this.setState({noteText: ''});
+        }
+    }
+
+    deleteNote(key) {
+        this.state.noteArray.splice(key, 1);
+        this.setState({noteArray: this.state.noteArray});
     }
 }
 
