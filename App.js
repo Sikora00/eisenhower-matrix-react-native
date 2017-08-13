@@ -7,7 +7,8 @@ import {
     ScrollView,
     TouchableOpacity
 } from 'react-native';
-import Note from './app/components/Note'
+import Note from './app/components/Note';
+import ApiUtils from './app/components/ApiUtils'
 
 export default class App extends React.Component {
 
@@ -16,7 +17,7 @@ export default class App extends React.Component {
         noteText: '',
     };
 
-    constructor(){
+    constructor() {
         super();
         this.pullNotes();
     }
@@ -60,6 +61,24 @@ export default class App extends React.Component {
                 'note': this.state.noteText
             });
             this.setState({noteArray: this.state.noteArray});
+            fetch('http://192.168.0.14/eisenhower-matrix-api/web/app_dev.php/task', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: this.state.noteText
+                    })
+                }
+            )
+                .then(ApiUtils.checkStatus)
+                .then(response => response.json())
+                .catch(e => e)
+                .then((res) => {
+                    alert(JSON.stringify(res));
+                })
+             .done();
             this.setState({noteText: ''});
         }
     }
@@ -70,8 +89,8 @@ export default class App extends React.Component {
     }
 
     pullNotes() {
-        fetch('http://192.168.0.14/eisenhower-matrix/web/', {
-            method: 'POST',
+        fetch('http://192.168.0.14/eisenhower-matrix-api/web/app_dev.php/task', {
+            method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -83,7 +102,7 @@ export default class App extends React.Component {
                 res.forEach((note) => {
                     this.state.noteArray.push({
                         'date': note.date,
-                        'note': note.note,
+                        'note': note.title,
                     });
                     this.setState({noteArray: this.state.noteArray});
                 });
