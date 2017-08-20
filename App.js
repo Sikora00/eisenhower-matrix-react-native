@@ -10,6 +10,7 @@ import {
 import TaskComponent from './app/components/Task';
 import ApiUtils from './app/components/ApiUtils'
 import Task from './app/entities/Task.js'
+import { API_URL } from 'react-native-dotenv'
 
 export default class App extends React.Component {
 
@@ -56,7 +57,7 @@ export default class App extends React.Component {
 
     addTask() {
         if (this.state.taskText) {
-            fetch('http://192.168.0.14/eisenhower-matrix-api/web/app_dev.php/task', {
+            fetch(API_URL + 'task', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -85,7 +86,7 @@ export default class App extends React.Component {
 
     deleteTask(key) {
         task = this.state.taskArray[key];
-        fetch('http://192.168.0.14/eisenhower-matrix-api/web/app_dev.php/task/'+task.id, {
+        fetch(API_URL + 'task/'+task.id, {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
@@ -104,7 +105,7 @@ export default class App extends React.Component {
 
     pullTasks() {
         this.state.taskArray = [];
-        fetch('http://192.168.0.14/eisenhower-matrix-api/web/app_dev.php/task', {
+        fetch(API_URL + 'task', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -120,6 +121,7 @@ export default class App extends React.Component {
                     this.setState({taskArray: this.state.taskArray});
                 });
             })
+            .catch(e => e)
             .done();
     }
 
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     header: {
-        backgroundColor: '#E91E63',
+        backgroundColor: '#00b1e9',
         alignItems: 'center',
         borderBottomWidth: 10,
         borderBottomColor: '#ddd',
@@ -152,7 +154,7 @@ const styles = StyleSheet.create({
         right: 0,
     },
     addButton: {
-        backgroundColor: '#E91E63',
+        backgroundColor: '#0b66e9',
         width: 90,
         height: 90,
         borderRadius: 50,
