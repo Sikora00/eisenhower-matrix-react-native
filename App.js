@@ -7,39 +7,46 @@ import {
     ScrollView,
     TouchableOpacity
 } from 'react-native';
-import Note from './app/components/Note'
+import TaskComponent from './app/components/Task';
+import ApiUtils from './app/components/ApiUtils'
+import Task from './app/entities/Task.js'
 
 export default class App extends React.Component {
 
     state = {
-        noteArray: [{'note': 'testnote1'}],
-        noteText: '',
+        taskArray: [],
+        taskText: '',
+    };
+
+    constructor() {
+        super();
+        this.pullTasks();
     }
 
     render() {
 
-        let notes = this.state.noteArray.map((val, key) => {
-            return <Note key={key} keyval={key} val={val} deleteMethod={() => this.deleteNote(key)}/>
+        let tasks = this.state.taskArray.map((task, key) => {
+            return <TaskComponent key={key} keyval={key} task={task} deleteMethod={() => this.deleteTask(key)}/>
         });
 
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Text style={styles.headerText}>= Noter -</Text>
+                    <Text style={styles.headerText}>= Eisenhower Matrix -</Text>
                 </View>
 
                 <ScrollView style={styles.scrollContainer}>
-                    {notes}
+                    {tasks}
                 </ScrollView>
 
                 <View style={styles.footer}/>
-                <TouchableOpacity onPress={this.addNote.bind(this)} style={styles.addButton}>
+                <TouchableOpacity onPress={this.addTask.bind(this)} style={styles.addButton}>
                     <Text style={styles.addButtonText}>+</Text>
                 </TouchableOpacity>
 
                 <TextInput style={styles.textInput}
-                           onChangeText={(noteText) => this.setState({noteText})} value={this.state.noteText}
-                           placeholder='> note' placeholderTextColor='white' underlineColorAndroid='transparent'>
+                           onChangeText={(taskText) => this.setState({taskText})} value={this.state.taskText}
+                           placeholder='> task' placeholderTextColor='white' underlineColorAndroid='transparent'>
                 </TextInput>
 
             </View>
@@ -47,22 +54,75 @@ export default class App extends React.Component {
         );
     }
 
-    addNote() {
-        if (this.state.noteText) {
-            var d = new Date();
-            this.state.noteArray.push({
-                'date': d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear(),
-                'note': this.state.noteText
-            });
-            this.setState({noteArray: this.state.noteArray});
-            this.setState({noteText: ''});
+    addTask() {
+        if (this.state.taskText) {
+            fetch('http://192.168.0.14/eisenhower-matrix-api/web/app_dev.php/task', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: this.state.taskText
+                    })
+                }
+            )
+                .then(ApiUtils.checkStatus)
+                .then(response => response.json())
+                .then((task) => {
+                    this.state.taskArray.push(
+                        new Task(task.id, task.title)
+                    );
+                    this.setState({taskArray: this.state.taskArray});
+                })
+                .catch(e => e)
+             .done();
+
+            this.setState({taskText: ''});
+
         }
     }
 
-    deleteNote(key) {
-        this.state.noteArray.splice(key, 1);
-        this.setState({noteArray: this.state.noteArray});
+    deleteTask(key) {
+        task = this.state.taskArray[key];
+        fetch('http://192.168.0.14/eisenhower-matrix-api/web/app_dev.php/task/'+task.id, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                }
+            }
+        )
+            .then(ApiUtils.checkStatus)
+            .then(response => response.json())
+            .catch(e => e)
+            .done();
+
+        this.state.taskArray.splice(key, 1);
+        this.setState({taskArray: this.state.taskArray});
     }
+
+    pullTasks() {
+        this.state.taskArray = [];
+        fetch('http://192.168.0.14/eisenhower-matrix-api/web/app_dev.php/task', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                res.forEach((task) => {
+                    this.state.taskArray.push(
+                        new Task(task.id, task.title)
+                    );
+                    this.setState({taskArray: this.state.taskArray});
+                });
+            })
+            .done();
+    }
+
 }
 
 const styles = StyleSheet.create({
@@ -82,7 +142,7 @@ const styles = StyleSheet.create({
     },
     scrollContainer: {
         flex: 1,
-        marginBottom: 100,
+        marginBottom: 0,
     },
     footer: {
         position: 'absolute',
