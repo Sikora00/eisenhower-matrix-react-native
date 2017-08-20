@@ -34,13 +34,13 @@ const styles = StyleSheet.create({
     noteText: {
       paddingLeft: 20,
       borderLeftWidth: 10,
-      borderLeftColor: '#E91E63'
+      borderLeftColor: '#00ace9'
     },
     noteDelete: {
         position: 'absolute',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#2890b9',
+        backgroundColor: 'red',
         padding: 10,
         top: 10,
         bottom: 10,
