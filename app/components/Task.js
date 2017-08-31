@@ -10,12 +10,12 @@ export default class TaskComponent extends React.Component {
     task;
     render() {
         return (
-            <View key={this.props.keyval}  style={styles.note}>
+            <View style={styles.note}>
 
                 <Text style={styles.noteText}>{this.props.task.data}</Text>
                 <Text style={styles.noteText}>{this.props.task.title}</Text>
 
-                <TouchableOpacity onPress={this.props.deleteMethod} style={styles.noteDelete}>
+                <TouchableOpacity style={styles.noteDelete}>
                     <Text style={styles.noteDeleteText}>D</Text>
                 </TouchableOpacity>
             </View>
@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
         padding: 20,
         paddingRight: 100,
         borderBottomWidth: 2,
-        borderBottomColor: '#ededed'
+        borderBottomColor: '#ededed',
+        backgroundColor: '#fff'
     },
     noteText: {
       paddingLeft: 20,

@@ -7,10 +7,10 @@ import {
     ScrollView,
     TouchableOpacity
 } from 'react-native';
-import TaskComponent from './app/components/Task';
 import ApiUtils from './app/components/ApiUtils'
 import Task from './app/entities/Task.js'
 import { API_URL } from 'react-native-dotenv'
+import TaskList from "./app/components/TaskList";
 
 export default class App extends React.Component {
 
@@ -26,10 +26,6 @@ export default class App extends React.Component {
 
     render() {
 
-        let tasks = this.state.taskArray.map((task, key) => {
-            return <TaskComponent key={key} keyval={key} task={task} deleteMethod={() => this.deleteTask(key)}/>
-        });
-
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
@@ -37,7 +33,7 @@ export default class App extends React.Component {
                 </View>
 
                 <ScrollView style={styles.scrollContainer}>
-                    {tasks}
+                    <TaskList tasks={this.state.taskArray} addTask={this.addTask.bind(this)}/>
                 </ScrollView>
 
                 <View style={styles.footer}/>
@@ -84,8 +80,7 @@ export default class App extends React.Component {
         }
     }
 
-    deleteTask(key) {
-        task = this.state.taskArray[key];
+    deleteTask(task) {
         fetch(API_URL + 'task/'+task.id, {
                 method: 'DELETE',
                 headers: {
@@ -99,12 +94,16 @@ export default class App extends React.Component {
             .catch(e => e)
             .done();
 
-        this.state.taskArray.splice(key, 1);
+        let tasks = this.state.taskArray;
+        key = tasks.findIndex(function (item) {
+            return task.id = item.id
+        });
+        this.state.taskArray.filter(key, 1);
         this.setState({taskArray: this.state.taskArray});
     }
 
     pullTasks() {
-        this.state.taskArray = [];
+        this.state.taskArray = [new Task(100, "tekścik")];
         fetch(API_URL + 'task', {
             method: 'GET',
             headers: {
