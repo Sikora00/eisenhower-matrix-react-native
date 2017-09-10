@@ -24,6 +24,7 @@ class TaskLists extends React.Component {
 
     constructor() {
         super();
+        this.state.taskArray = [new Task(100, "tekścik")];
         this.pullTasks();
     }
 
@@ -36,7 +37,7 @@ class TaskLists extends React.Component {
                 </View>
 
                 <ScrollView style={styles.scrollContainer}>
-                    <TaskList tasks={this.state.taskArray} addTask={this.addTask.bind(this)}/>
+                    <TaskList tasks={this.state.taskArray}/>
                 </ScrollView>
 
                 <View style={styles.footer}/>
@@ -54,34 +55,6 @@ class TaskLists extends React.Component {
         );
     }
 
-    addTask() {
-        if (this.state.taskText) {
-            fetch('http://192.168.0.13/eisenhower-matrix-api/web/app_dev.php/' + 'task', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        title: this.state.taskText
-                    })
-                }
-            )
-                .then(ApiUtils.checkStatus)
-                .then(response => response.json())
-                .then((task) => {
-                    this.state.taskArray.push(
-                        new Task(task.id, task.title)
-                    );
-                    this.setState({taskArray: this.state.taskArray});
-                })
-                .catch(e => e)
-             .done();
-
-            this.setState({taskText: ''});
-
-        }
-    }
 
     deleteTask(task) {
         fetch('http://192.168.0.13/eisenhower-matrix-api/web/app_dev.php/' + 'task/'+task.id, {
@@ -106,7 +79,6 @@ class TaskLists extends React.Component {
     }
 
     pullTasks() {
-        this.state.taskArray = [new Task(100, "tekścik")];
         fetch('http://192.168.0.13/eisenhower-matrix-api/web/app_dev.php/' + 'task', {
             method: 'GET',
             headers: {
@@ -120,7 +92,7 @@ class TaskLists extends React.Component {
                     this.state.taskArray.push(
                         new Task(task.id, task.title)
                     );
-                    this.setState({taskArray: this.state.taskArray});
+                    this.state.taskArray = [new Task(100, "tekścik")];
                 });
             })
             .catch(e => e)

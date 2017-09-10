@@ -51,10 +51,18 @@ export default class TaskForm extends React.Component {
         title: 'Add Task',
     };
 
+    state = {
+        taskText: '',
+    };
+
     render() {
         return (
             <View style={styles.container}>
-                <TextInput style={styles.input}/>
+                <TextInput
+                    onPress={this.addTask()}
+                    style={styles.input}
+                    onChangeText={(taskText) => this.setState({taskText})} value={this.state.taskText}
+                    />
                 <TouchableHighlight style={styles.button}>
                     <Text style={styles.buttonText}>
                         Add
@@ -68,5 +76,34 @@ export default class TaskForm extends React.Component {
                 </TouchableHighlight>
             </View>
         )
+    }
+
+    addTask() {
+        if (this.state.taskText) {
+            fetch('http://192.168.0.13/eisenhower-matrix-api/web/app_dev.php/' + 'task', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: this.state.taskText
+                    })
+                }
+            )
+                .then(ApiUtils.checkStatus)
+                .then(response => response.json())
+                .then((task) => {
+                    this.state.taskArray.push(
+                        new Task(task.id, task.title)
+                    );
+                    this.setState({taskArray: this.state.taskArray});
+                })
+                .catch(e => e)
+                .done();
+
+            this.setState({taskText: ''});
+
+        }
     }
 }

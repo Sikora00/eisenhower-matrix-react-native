@@ -1,0 +1,3 @@
+rootProject.name = 'eisenhover-matrix'
+
+include ':app'

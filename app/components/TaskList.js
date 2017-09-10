@@ -24,6 +24,13 @@ class TaskList extends React.Component {
         };
     }
 
+
+    componentWillUpdate(nextProps, nextState) {
+        alert(JSON.stringify(nextProps.tasks));
+        const dataSource = this.state.dataSource.cloneWithRows(nextProps.tasks);
+        this.state({dataSource});
+    }
+
     renderRow(task) {
         return (
             <TaskComponent task={task}/>
@@ -49,7 +56,6 @@ class TaskList extends React.Component {
 }
 
 TaskList.propTypes = {
-    addTask: React.PropTypes.func.isRequired,
     tasks: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
 };
 
