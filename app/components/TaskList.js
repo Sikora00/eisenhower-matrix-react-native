@@ -42,14 +42,6 @@ class TaskList extends React.Component {
 
 
                 <View style={styles.footer}/>
-                <TouchableOpacity onPress={this.props.addTask} style={styles.addButton}>
-                    <Text style={styles.addButtonText}>+</Text>
-                </TouchableOpacity>
-
-                <TextInput style={styles.textInput}
-                           onChangeText={(taskText) => this.setState({taskText})} value={this.state.taskText}
-                           placeholder='> task' placeholderTextColor='white' underlineColorAndroid='transparent'>
-                </TextInput>
 
             </View>
         )
