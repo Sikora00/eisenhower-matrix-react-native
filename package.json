@@ -1,28 +1,22 @@
 {
-  "name": "react-native-first-project",
-  "version": "0.1.0",
-  "private": true,
-  "devDependencies": {
-    "jest-expo": "~19.0.0",
-    "react-native-dotenv": "^0.1.0",
-    "react-native-scripts": "1.1.0",
-    "react-test-renderer": "16.0.0-alpha.12"
-  },
-  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
-  "scripts": {
-    "start": "react-native-scripts start",
-    "eject": "react-native-scripts eject",
-    "android": "react-native-scripts android",
-    "ios": "react-native-scripts ios",
-    "test": "node node_modules/jest/bin/jest.js --watch"
-  },
-  "jest": {
-    "preset": "jest-expo"
-  },
-  "dependencies": {
-    "@types/react": "^16.0.2",
-    "expo": "^19.0.0",
-    "react": "16.0.0-alpha.12",
-    "react-native": "^0.46.1"
-  }
+	"name": "EisenhoverMatrix",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"start": "node node_modules/react-native/local-cli/cli.js start",
+		"test": "jest"
+	},
+	"dependencies": {
+		"react": "16.0.0-alpha.12",
+		"react-native": "0.48.2"
+	},
+	"devDependencies": {
+		"babel-jest": "21.0.2",
+		"babel-preset-react-native": "3.0.2",
+		"jest": "21.0.2",
+		"react-test-renderer": "16.0.0-alpha.12"
+	},
+	"jest": {
+		"preset": "react-native"
+	}
 }
