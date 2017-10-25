@@ -3,12 +3,12 @@ import {
     AppRegistry,
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import TaskLists from './app/components/TaskList'
 import TaskForm from './app/components/TaskForm'
+import DashboardComponent from "./app/components/DashboardComponent";
 
 const AppNavigator = StackNavigator({
     Home: {
-        screen: TaskLists
+        screen: DashboardComponent
     },
     AddTask: {
         screen: TaskForm
