@@ -14,15 +14,15 @@ import {
     TextInput,
   ScrollView
 } from 'react-native';
-// import TaskComponent from './app/components/Task';
-// import ApiUtils from './app/components/ApiUtils'
-// import Task from './app/entities/Task.js'
+import TaskComponent from './app/components/Task';
+import ApiUtils from './app/components/ApiUtils'
+import Task from './app/entities/Task.js'
 
 
 export default class App extends Component<{}> {
 
     state = {
-        taskArray: [],
+        taskArray: [new Task(1,'Test')],
         taskText: '',
     };
     constructor() {
@@ -33,7 +33,7 @@ export default class App extends Component<{}> {
     render() {
 
         let tasks = this.state.taskArray.map((task, key) => {
-            // return <TaskComponent key={key} keyval={key} task={task} deleteMethod={() => this.deleteTask(key)}/>
+            return <TaskComponent key={key} keyval={key} task={task} deleteMethod={() => this.deleteTask(key)}/>
         });
 
         return (
@@ -43,7 +43,7 @@ export default class App extends Component<{}> {
               </View>
 
               <ScrollView style={styles.scrollContainer}>
-                  {/*{tasks}*/}
+                  {tasks}
               </ScrollView>
 
               <View style={styles.footer}/>
@@ -63,7 +63,7 @@ export default class App extends Component<{}> {
 
     addTask() {
         if (this.state.taskText) {
-            fetch('http://127.0.0.1:8000/' + 'task', {
+            fetch('http://192.168.0.13/' + 'task', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -92,7 +92,7 @@ export default class App extends Component<{}> {
 
     deleteTask(key) {
         task = this.state.taskArray[key];
-        fetch('http://127.0.0.1:8000/' + 'task/'+task.id, {
+        fetch('http://192.168.0.13/' + 'task/'+task.id, {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
@@ -111,7 +111,7 @@ export default class App extends Component<{}> {
 
     pullTasks() {
         this.state.taskArray = [];
-        fetch('http://127.0.0.1:8000/' + 'task', {
+        fetch('http://192.168.0.13/' + 'task', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
