@@ -1,13 +1,5 @@
-import React, { Component } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-    TextInput,
-  ScrollView
-} from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import TaskComponent from './TaskComponent';
 import ApiUtils from './ApiUtils'
 import Task from '../entities/Task'
@@ -15,10 +7,14 @@ import TaskList from './TaskList'
 
 class DashboardComponent extends Component<{}> {
 
+    static navigationOptions = {
+        title: 'Task Lists',
+    };
     state = {
-        taskArray: [new Task(1,'Test')],
+        taskArray: [new Task(1, 'Test')],
         taskText: '',
     };
+
     constructor() {
         super();
         this.pullTasks();
@@ -31,24 +27,26 @@ class DashboardComponent extends Component<{}> {
             return <TaskComponent key={key} keyval={key} task={task} deleteMethod={() => this.deleteTask(key)}/>
         });
 
+        const {navigate} =this.props.navigation;
+
         return (
             <View style={styles.container}>
-              <View style={styles.header}>
-                <Text style={styles.headerText}>= Eisenhower Matrix -</Text>
-              </View>
+                <View style={styles.header}>
+                    <Text style={styles.headerText}>= Eisenhower Matrix -</Text>
+                </View>
 
                 <TaskList tasks={this.state.taskArray} deleteTask={this.deleteTask}/>
                 <TaskList tasks={this.state.taskArray}/>
 
-              <View style={styles.footer}/>
-              <TouchableOpacity onPress={this.addTask.bind(this)} style={styles.addButton}>
-                <Text style={styles.addButtonText}>+</Text>
-              </TouchableOpacity>
+                <View style={styles.footer}/>
+                <TouchableOpacity onPress={() => navigate('AddTask')} style={styles.addButton}>
+                    <Text style={styles.addButtonText}>+</Text>
+                </TouchableOpacity>
 
-              <TextInput style={styles.textInput}
-                         onChangeText={(taskText) => this.setState({taskText})} value={this.state.taskText}
-                         placeholder='> task' placeholderTextColor='white' underlineColorAndroid='transparent'>
-              </TextInput>
+                <TextInput style={styles.textInput}
+                           onChangeText={(taskText) => this.setState({taskText})} value={this.state.taskText}
+                           placeholder='> task' placeholderTextColor='white' underlineColorAndroid='transparent'>
+                </TextInput>
 
             </View>
 
@@ -86,7 +84,7 @@ class DashboardComponent extends Component<{}> {
 
     deleteTask(key) {
         let task = this.state.taskArray[key];
-        fetch('http://192.168.0.13/' + 'task/'+task.id, {
+        fetch('http://192.168.0.13/' + 'task/' + task.id, {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
