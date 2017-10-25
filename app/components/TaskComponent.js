@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
     StyleSheet,
     Text,
@@ -6,7 +6,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 
-export default class TaskComponent extends React.Component {
+export default class TaskComponent extends Component<{}> {
     task;
     render() {
         return (
