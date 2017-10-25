@@ -52,6 +52,9 @@ export default class TaskForm extends Component<{}> {
     };
 
     render() {
+
+        const {goBack} = this.props.navigation;
+
         return (
             <View style={styles.container}>
                 <TextInput style={styles.input}/>
@@ -61,7 +64,9 @@ export default class TaskForm extends Component<{}> {
                     </Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={[styles.button, styles.cancelButton]}>
+                <TouchableHighlight
+                    onPress={() => goBack()}
+                    style={[styles.button, styles.cancelButton]}>
                     <Text style={styles.buttonText}>
                         Cancel
                     </Text>
