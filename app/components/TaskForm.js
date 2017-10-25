@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactNative from 'react-native';
 
 const {
@@ -47,8 +47,18 @@ const styles = ReactNative.StyleSheet.create({
 
 export default class TaskForm extends Component<{}> {
 
+    constructor() {
+        super();
+        this.addTask = this.addTask.bind(this);
+    }
+
+
     static navigationOptions = {
         title: 'Add Task',
+    };
+
+    state = {
+        taskText: '',
     };
 
     render() {
@@ -57,8 +67,12 @@ export default class TaskForm extends Component<{}> {
 
         return (
             <View style={styles.container}>
-                <TextInput style={styles.input}/>
-                <TouchableHighlight style={styles.button}>
+                <TextInput style={styles.input}
+                    onChangeText={(taskText) => this.setState({taskText})} value={this.state.taskText}
+                />
+                <TouchableHighlight
+                    onPress={() => this.addTask()}
+                    style={styles.button}>
                     <Text style={styles.buttonText}>
                         Add
                     </Text>
@@ -73,5 +87,11 @@ export default class TaskForm extends Component<{}> {
                 </TouchableHighlight>
             </View>
         )
+    }
+
+    addTask() {
+        const {goBack} = this.props.navigation;
+        this.props.navigation.state.params.addTask(this.state.taskText);
+        goBack();
     }
 }

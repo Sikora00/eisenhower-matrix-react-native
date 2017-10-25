@@ -19,13 +19,10 @@ class DashboardComponent extends Component<{}> {
         super();
         this.pullTasks();
         this.deleteTask = this.deleteTask.bind(this);
+        this.addTask = this.addTask.bind(this);
     }
 
     render() {
-
-        let tasks = this.state.taskArray.map((task, key) => {
-            return <TaskComponent key={key} keyval={key} task={task} deleteMethod={() => this.deleteTask(key)}/>
-        });
 
         const {navigate} =this.props.navigation;
 
@@ -39,7 +36,7 @@ class DashboardComponent extends Component<{}> {
                 <TaskList tasks={this.state.taskArray}/>
 
                 <View style={styles.footer}/>
-                <TouchableOpacity onPress={() => navigate('AddTask')} style={styles.addButton}>
+                <TouchableOpacity onPress={() => navigate('AddTask', {addTask: this.addTask})} style={styles.addButton}>
                     <Text style={styles.addButtonText}>+</Text>
                 </TouchableOpacity>
 
@@ -53,8 +50,10 @@ class DashboardComponent extends Component<{}> {
         );
     }
 
-    addTask() {
-        if (this.state.taskText) {
+    addTask(text) {
+        if(!text) {
+            return;
+        }
             fetch('http://192.168.0.13/' + 'task', {
                     method: 'POST',
                     headers: {
@@ -62,7 +61,7 @@ class DashboardComponent extends Component<{}> {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        title: this.state.taskText
+                        title: text
                     })
                 }
             )
@@ -79,7 +78,6 @@ class DashboardComponent extends Component<{}> {
 
             this.setState({taskText: ''});
 
-        }
     }
 
     deleteTask(key) {
