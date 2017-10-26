@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import TaskComponent from './TaskComponent';
 import ApiUtils from './ApiUtils'
 import Task from '../entities/Task'
 import TaskList from './TaskList'
@@ -16,7 +15,7 @@ class DashboardComponent extends Component<{}> {
 
     constructor() {
         super();
-        this.pullTasks();
+        store.dispatch({type:'PULL_TASKS'});
         this.deleteTask = this.deleteTask.bind(this);
         this.addTask = this.addTask.bind(this);
 
@@ -27,7 +26,7 @@ class DashboardComponent extends Component<{}> {
     }
 
     render() {
-        const {navigate} =this.props.navigation;
+        const {navigate} = this.props.navigation;
 
         return (
             <View style={styles.container}>
@@ -54,33 +53,33 @@ class DashboardComponent extends Component<{}> {
     }
 
     addTask(text) {
-        if(!text) {
+        if (!text) {
             return;
         }
-            fetch('http://192.168.0.13/' + 'task', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        title: text
-                    })
-                }
-            )
-                .then(ApiUtils.checkStatus)
-                .then(response => response.json())
-                .then((task) => {
-                        taskEntity = new Task(task.id, task.title);
-                    store.dispatch({
-                            type: 'ADD_TASK',
-                            task: taskEntity
-                        })
+        fetch('http://192.168.0.13/' + 'task', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    title: text
                 })
-                .catch(e => e)
-                .done();
+            }
+        )
+            .then(ApiUtils.checkStatus)
+            .then(response => response.json())
+            .then((task) => {
+                taskEntity = new Task(task.id, task.title);
+                store.dispatch({
+                    type: 'ADD_TASK',
+                    task: taskEntity
+                })
+            })
+            .catch(e => e)
+            .done();
 
-            this.setState({taskText: ''});
+        this.setState({taskText: ''});
 
     }
 
