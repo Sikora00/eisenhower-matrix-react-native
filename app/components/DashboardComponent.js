@@ -27,8 +27,6 @@ class DashboardComponent extends Component<{}> {
     }
 
     render() {
-        console.log(this.state);
-
         const {navigate} =this.props.navigation;
 
         return (
@@ -101,8 +99,7 @@ class DashboardComponent extends Component<{}> {
             .catch(e => e)
             .done();
 
-        this.state.tasks.splice(key, 1);
-        this.setState({tasks: this.state.tasks});
+        store.dispatch({type: 'DELETE_TASK', task: task, key: key});
     }
 
     pullTasks() {

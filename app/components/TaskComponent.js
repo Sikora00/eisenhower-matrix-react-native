@@ -9,7 +9,6 @@ import {
 export default class TaskComponent extends Component<{}> {
     task;
     render() {
-        console.log(this.props);
         return (
             <View key={this.props.keyval}  style={styles.note}>
 

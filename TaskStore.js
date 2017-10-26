@@ -6,14 +6,18 @@ const defaultState = {
 };
 
 function taskStore(state = defaultState, action) {
-    console.log(action);
     switch (action.type) {
         case 'ADD_TASK':
-            console.log('switch');
             return Object.assign({}, state, {
                 tasks: state.tasks.concat([
                   action.task
                 ]),
+            });
+        case 'DELETE_TASK':
+            return Object.assign({}, state, {
+                tasks: state.tasks.filter(task => {
+                    return task !== action.task
+                })
             });
         default:
             return state;
