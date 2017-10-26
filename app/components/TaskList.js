@@ -15,7 +15,7 @@ import Task from '../entities/Task'
 class TaskList extends Component<{}> {
 
     state = {
-        taskArray: [new Task(1,'Test')],
+        tasks: [new Task(1,'Test')],
         taskText: '',
     };
 

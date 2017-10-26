@@ -4,25 +4,30 @@ import TaskComponent from './TaskComponent';
 import ApiUtils from './ApiUtils'
 import Task from '../entities/Task'
 import TaskList from './TaskList'
+import store from '../../TaskStore';
 
 class DashboardComponent extends Component<{}> {
 
     static navigationOptions = {
         title: 'Task Lists',
     };
-    state = {
-        taskArray: [new Task(1, 'Test')],
-        taskText: '',
-    };
+
+    state = store.getState();
 
     constructor() {
         super();
         this.pullTasks();
         this.deleteTask = this.deleteTask.bind(this);
         this.addTask = this.addTask.bind(this);
+
+        this.state = store.getState();
+        store.subscribe(() => {
+            this.setState(store.getState());
+        })
     }
 
     render() {
+        console.log(this.state);
 
         const {navigate} =this.props.navigation;
 
@@ -32,8 +37,8 @@ class DashboardComponent extends Component<{}> {
                     <Text style={styles.headerText}>= Eisenhower Matrix -</Text>
                 </View>
 
-                <TaskList tasks={this.state.taskArray} deleteTask={this.deleteTask}/>
-                <TaskList tasks={this.state.taskArray}/>
+                <TaskList tasks={this.state.tasks} deleteTask={this.deleteTask}/>
+                <TaskList tasks={this.state.tasks}/>
 
                 <View style={styles.footer}/>
                 <TouchableOpacity onPress={() => navigate('AddTask', {addTask: this.addTask})} style={styles.addButton}>
@@ -68,10 +73,11 @@ class DashboardComponent extends Component<{}> {
                 .then(ApiUtils.checkStatus)
                 .then(response => response.json())
                 .then((task) => {
-                    this.state.taskArray.push(
-                        new Task(task.id, task.title)
-                    );
-                    this.setState({taskArray: this.state.taskArray});
+                        taskEntity = new Task(task.id, task.title);
+                    store.dispatch({
+                            type: 'ADD_TASK',
+                            task: taskEntity
+                        })
                 })
                 .catch(e => e)
                 .done();
@@ -81,7 +87,7 @@ class DashboardComponent extends Component<{}> {
     }
 
     deleteTask(key) {
-        let task = this.state.taskArray[key];
+        let task = this.state.tasks[key];
         fetch('http://192.168.0.13/' + 'task/' + task.id, {
                 method: 'DELETE',
                 headers: {
@@ -95,12 +101,12 @@ class DashboardComponent extends Component<{}> {
             .catch(e => e)
             .done();
 
-        this.state.taskArray.splice(key, 1);
-        this.setState({taskArray: this.state.taskArray});
+        this.state.tasks.splice(key, 1);
+        this.setState({tasks: this.state.tasks});
     }
 
     pullTasks() {
-        this.state.taskArray = [];
+        this.state.tasks = [];
         fetch('http://192.168.0.13/' + 'task', {
             method: 'GET',
             headers: {
@@ -111,10 +117,10 @@ class DashboardComponent extends Component<{}> {
             .then((response) => response.json())
             .then((res) => {
                 res.forEach((task) => {
-                    this.state.taskArray.push(
+                    this.state.tasks.push(
                         new Task(task.id, task.title)
                     );
-                    this.setState({taskArray: this.state.taskArray});
+                    this.setState({tasks: this.state.tasks});
                 });
             })
             .catch(e => e)
