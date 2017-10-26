@@ -4,6 +4,7 @@ import {apiMiddleware} from "./apiMiddleware";
 
 const defaultState = {
     tasks: [new Task(1,'Test')],
+    loading: true
 };
 
 function taskStore(state = defaultState, action) {

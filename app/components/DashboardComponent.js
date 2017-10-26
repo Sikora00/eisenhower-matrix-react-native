@@ -4,6 +4,8 @@ import ApiUtils from './ApiUtils'
 import Task from '../entities/Task'
 import TaskList from './TaskList'
 import store from '../../TaskStore';
+import Spinner from 'react-native-loading-spinner-overlay';
+
 
 class DashboardComponent extends Component<{}> {
 
@@ -28,28 +30,34 @@ class DashboardComponent extends Component<{}> {
     render() {
         const {navigate} = this.props.navigation;
 
-        return (
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>= Eisenhower Matrix -</Text>
+            return (
+                <View style={styles.container}>
+                    <View style={styles.header}>
+                        <Text style={styles.headerText}>= Eisenhower Matrix -</Text>
+                    </View>
+
+                    {this.state.loading ? (
+                        <View style={{ flex: 1 }}>
+                            <Spinner visible={this.state.loading} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
+                        </View>
+                    ) : (
+                        <TaskList tasks={this.state.tasks} deleteTask={this.deleteTask}/>
+                    )}
+
+                    <View style={styles.footer}/>
+                    <TouchableOpacity onPress={() => navigate('AddTask', {addTask: this.addTask})}
+                                      style={styles.addButton}>
+                        <Text style={styles.addButtonText}>+</Text>
+                    </TouchableOpacity>
+
+                    <TextInput style={styles.textInput}
+                               onChangeText={(taskText) => this.setState({taskText})} value={this.state.taskText}
+                               placeholder='> task' placeholderTextColor='white' underlineColorAndroid='transparent'>
+                    </TextInput>
+
                 </View>
 
-                <TaskList tasks={this.state.tasks} deleteTask={this.deleteTask}/>
-                <TaskList tasks={this.state.tasks}/>
-
-                <View style={styles.footer}/>
-                <TouchableOpacity onPress={() => navigate('AddTask', {addTask: this.addTask})} style={styles.addButton}>
-                    <Text style={styles.addButtonText}>+</Text>
-                </TouchableOpacity>
-
-                <TextInput style={styles.textInput}
-                           onChangeText={(taskText) => this.setState({taskText})} value={this.state.taskText}
-                           placeholder='> task' placeholderTextColor='white' underlineColorAndroid='transparent'>
-                </TextInput>
-
-            </View>
-
-        );
+            );
     }
 
     addTask(text) {
@@ -99,28 +107,6 @@ class DashboardComponent extends Component<{}> {
             .done();
 
         store.dispatch({type: 'DELETE_TASK', task: task, key: key});
-    }
-
-    pullTasks() {
-        this.state.tasks = [];
-        fetch('http://192.168.0.13/' + 'task', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            }
-        })
-            .then((response) => response.json())
-            .then((res) => {
-                res.forEach((task) => {
-                    this.state.tasks.push(
-                        new Task(task.id, task.title)
-                    );
-                    this.setState({tasks: this.state.tasks});
-                });
-            })
-            .catch(e => e)
-            .done();
     }
 
 }
