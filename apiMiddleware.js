@@ -1,4 +1,4 @@
-const API = 'http://192.168.0.13/';
+const API = 'https://ms-eisenhover-matrix.herokuapp.com/';
 
 export const apiMiddleware = store => next => action => {
     // Pass all actions through by default
