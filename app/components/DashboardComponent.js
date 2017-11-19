@@ -64,7 +64,7 @@ class DashboardComponent extends Component<{}> {
         if (!text) {
             return;
         }
-        fetch('http://192.168.0.13/' + 'task', {
+        fetch('https://ms-eisenhover-matrix.herokuapp.com/' + 'task', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -93,7 +93,7 @@ class DashboardComponent extends Component<{}> {
 
     deleteTask(key) {
         let task = this.state.tasks[key];
-        fetch('http://192.168.0.13/' + 'task/' + task.id, {
+        fetch('https://ms-eisenhover-matrix.herokuapp.com/' + 'task/' + task.id, {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
