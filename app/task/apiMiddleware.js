@@ -1,7 +1,9 @@
 import TaskActionTypes, {
     createTaskFailAction,
     createTaskSuccessAction,
-    loadTaskListFailAction, loadTaskListSuccessAction, removeTaskFailAction,
+    loadTaskListFailAction,
+    loadTaskListSuccessAction,
+    removeTaskFailAction,
     removeTaskSuccessAction
 } from "./TaskActions";
 
@@ -18,10 +20,7 @@ export const apiMiddleware = store => next => action => {
                     'Content-Type': 'application/json',
                 }
             })
-                .then(response => {
-                    alert('load2');
-                    return response.json()
-                })
+                .then(response => response.json())
                 .then(data => next(loadTaskListSuccessAction(data)))
                 .catch(error => next(loadTaskListFailAction(error)))
                 .done();
