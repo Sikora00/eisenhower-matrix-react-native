@@ -15,6 +15,7 @@ export default function reducer(state = defaultState, action) {
             };
         case TaskActionTypes.loadListSuccess:
             let tasks = [];
+            alert('success');
             action.payload.forEach((task) => {
                 tasks.push(
                     new Task(task.id, task.title)
@@ -30,12 +31,22 @@ export default function reducer(state = defaultState, action) {
                 ...state,
                 loading: false
             };
+        case TaskActionTypes.create:
+            return {
+                ...state,
+                loading: true
+            };
         case TaskActionTypes.createSuccess:
             return {
                 ...state,
                 tasks: state.tasks.concat([
                     action.task
                 ]),
+                loading: false
+            };
+        case TaskActionTypes.createFail:
+            return {
+                ...state,
                 loading: false
             };
         case TaskActionTypes.remove:

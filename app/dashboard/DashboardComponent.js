@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import ApiUtils from '../shared/ApiUtils'
-import Task from '../shared/models/Task'
 import TaskList from '../task/task-list/TaskList'
 import store from '../task/TaskStore';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {loadTaskListAction, removeTaskAction} from "../task/TaskActions";
-import TaskActionTypes from "../task/TaskActions";
+import {createTaskAction, loadTaskListAction, removeTaskAction} from "../task/TaskActions";
 
 
 class DashboardComponent extends Component<{}> {
@@ -66,29 +63,8 @@ class DashboardComponent extends Component<{}> {
         if (!text) {
             return;
         }
-        fetch('https://ms-eisenhover-matrix.herokuapp.com/' + 'task', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    title: text
-                })
-            }
-        )
-            .then(ApiUtils.checkStatus)
-            .then(response => response.json())
-            .then((task) => {
-                taskEntity = new Task(task.id, task.title);
-                store.dispatch({
-                    type: TaskActionTypes.createSuccess,
-                    task: taskEntity
-                })
-            })
-            .catch(e => e)
-            .done();
 
+        store.dispatch(createTaskAction({title: text}));
         this.setState({taskText: ''});
 
     }
