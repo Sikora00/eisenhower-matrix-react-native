@@ -6,6 +6,7 @@ import TaskActionTypes, {
     removeTaskFailAction,
     removeTaskSuccessAction
 } from "./TaskActions";
+import Task from "../shared/models/Task";
 
 const API = 'https://ms-eisenhover-matrix.herokuapp.com/';
 
@@ -48,7 +49,6 @@ export const apiMiddleware = store => next => action => {
                     body: JSON.stringify(action.payload)
                 }
             )
-                .then(ApiUtils.checkStatus)
                 .then(response => response.json())
                 .then((task) => {
                     taskEntity = new Task(task.id, task.title);

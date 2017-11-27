@@ -3,6 +3,7 @@ import Task from "../shared/models/Task";
 
 const defaultState = {
     tasks: [],
+    error: null,
     loading: true
 };
 
@@ -15,7 +16,6 @@ export default function reducer(state = defaultState, action) {
             };
         case TaskActionTypes.loadListSuccess:
             let tasks = [];
-            alert('success');
             action.payload.forEach((task) => {
                 tasks.push(
                     new Task(task.id, task.title)
@@ -29,7 +29,8 @@ export default function reducer(state = defaultState, action) {
         case TaskActionTypes.loadListFail:
             return {
                 ...state,
-                loading: false
+                loading: false,
+                error: action.payload
             };
         case TaskActionTypes.create:
             return {
@@ -40,7 +41,7 @@ export default function reducer(state = defaultState, action) {
             return {
                 ...state,
                 tasks: state.tasks.concat([
-                    action.task
+                    action.payload.task
                 ]),
                 loading: false
             };

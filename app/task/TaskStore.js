@@ -1,5 +1,5 @@
 import {applyMiddleware, createStore} from 'redux';
-import {apiMiddleware} from "./apiMiddleware";
+import {apiMiddleware} from "./ApiMiddleware";
 import TaskReducer from "./TaskReducer";
 
 

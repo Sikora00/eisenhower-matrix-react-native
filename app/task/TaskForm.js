@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import ReactNative from 'react-native';
+import store from './TaskStore';
+import {createTaskAction} from "./TaskActions";
 
 const {
     Text,
@@ -47,12 +49,6 @@ const styles = ReactNative.StyleSheet.create({
 
 export default class TaskForm extends Component<{}> {
 
-    constructor() {
-        super();
-        this.addTask = this.addTask.bind(this);
-    }
-
-
     static navigationOptions = {
         title: 'Add TaskModel',
     };
@@ -91,7 +87,12 @@ export default class TaskForm extends Component<{}> {
 
     addTask() {
         const {goBack} = this.props.navigation;
-        this.props.navigation.state.params.addTask(this.state.taskText);
-        goBack();
+        if (!this.state.taskText) {
+            return;
+        }
+
+        store.dispatch(createTaskAction({title: this.state.taskText}));
+        this.setState({taskText: ''});
+        goBack()
     }
 }

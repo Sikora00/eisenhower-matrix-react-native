@@ -3,7 +3,7 @@ import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native'
 import TaskList from '../task/task-list/TaskList'
 import store from '../task/TaskStore';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {createTaskAction, loadTaskListAction, removeTaskAction} from "../task/TaskActions";
+import {loadTaskListAction, removeTaskAction} from "../task/TaskActions";
 
 
 class DashboardComponent extends Component<{}> {
@@ -18,7 +18,6 @@ class DashboardComponent extends Component<{}> {
         super();
         store.dispatch(loadTaskListAction());
         this.deleteTask = this.deleteTask.bind(this);
-        this.addTask = this.addTask.bind(this);
 
         this.state = store.getState();
         store.subscribe(() => {
@@ -29,45 +28,39 @@ class DashboardComponent extends Component<{}> {
     render() {
         const {navigate} = this.props.navigation;
 
-            return (
-                <View style={styles.container}>
-                    <View style={styles.header}>
-                        <Text style={styles.headerText}>= Eisenhower Matrix -</Text>
-                    </View>
-
-                    {this.state.loading ? (
-                        <View style={{ flex: 1 }}>
-                            <Spinner visible={this.state.loading} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
-                        </View>
-                    ) : (
-                        <TaskList tasks={this.state.tasks} deleteTask={this.deleteTask}/>
-                    )}
-
-                    <View style={styles.footer}/>
-                    <TouchableOpacity onPress={() => navigate('AddTask', {addTask: this.addTask})}
-                                      style={styles.addButton}>
-                        <Text style={styles.addButtonText}>+</Text>
-                    </TouchableOpacity>
-
-                    <TextInput style={styles.textInput}
-                               onChangeText={(taskText) => this.setState({taskText})} value={this.state.taskText}
-                               placeholder='> task' placeholderTextColor='white' underlineColorAndroid='transparent'>
-                    </TextInput>
-
+        if(this.state.error) {
+            return this.state.error;
+        }
+        return (
+            <View style={styles.container}>
+                <View style={styles.header}>
+                    <Text style={styles.headerText}>= Eisenhower Matrix -</Text>
                 </View>
 
-            );
+                {this.state.loading ? (
+                    <View style={{flex: 1}}>
+                        <Spinner visible={this.state.loading} textContent={"Loading..."} textStyle={{color: '#FFF'}}/>
+                    </View>
+                ) : (
+                    <TaskList tasks={this.state.tasks} deleteTask={this.deleteTask}/>
+                )}
+
+                <View style={styles.footer}/>
+                <TouchableOpacity onPress={() => navigate('AddTask')}
+                                  style={styles.addButton}>
+                    <Text style={styles.addButtonText}>+</Text>
+                </TouchableOpacity>
+
+                <TextInput style={styles.textInput}
+                           onChangeText={(taskText) => this.setState({taskText})} value={this.state.taskText}
+                           placeholder='> task' placeholderTextColor='white' underlineColorAndroid='transparent'>
+                </TextInput>
+
+            </View>
+
+        );
     }
 
-    addTask(text) {
-        if (!text) {
-            return;
-        }
-
-        store.dispatch(createTaskAction({title: text}));
-        this.setState({taskText: ''});
-
-    }
 
     deleteTask(key) {
         let task = this.state.tasks[key];
