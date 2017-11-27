@@ -5,21 +5,27 @@ import {
     View,
     TouchableOpacity
 } from 'react-native';
+import store from './TaskStore';
+import {removeTaskAction} from "./TaskActions";
 
 export default class TaskComponent extends Component<{}> {
     task;
     render() {
         return (
-            <View key={this.props.keyval}  style={styles.note}>
+            <View style={styles.note}>
 
                 <Text style={styles.noteText}>{this.props.task.data}</Text>
                 <Text style={styles.noteText}>{this.props.task.title}</Text>
 
-                <TouchableOpacity onPress={this.props.deleteMethod} style={styles.noteDelete}>
+                <TouchableOpacity onPress={() => this.deleteTask()} style={styles.noteDelete}>
                     <Text style={styles.noteDeleteText}>D</Text>
                 </TouchableOpacity>
             </View>
         );
+    }
+
+    deleteTask() {
+        store.dispatch(removeTaskAction({task: this.props.task}));
     }
 }
 

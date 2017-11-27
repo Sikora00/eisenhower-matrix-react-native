@@ -17,7 +17,6 @@ class DashboardComponent extends Component<{}> {
     constructor() {
         super();
         store.dispatch(loadTaskListAction());
-        this.deleteTask = this.deleteTask.bind(this);
 
         this.state = store.getState();
         store.subscribe(() => {
@@ -42,7 +41,7 @@ class DashboardComponent extends Component<{}> {
                         <Spinner visible={this.state.loading} textContent={"Loading..."} textStyle={{color: '#FFF'}}/>
                     </View>
                 ) : (
-                    <TaskList tasks={this.state.tasks} deleteTask={this.deleteTask}/>
+                    <TaskList tasks={this.state.tasks}/>
                 )}
 
                 <View style={styles.footer}/>
@@ -59,12 +58,6 @@ class DashboardComponent extends Component<{}> {
             </View>
 
         );
-    }
-
-
-    deleteTask(key) {
-        let task = this.state.tasks[key];
-        store.dispatch(removeTaskAction({task: task}));
     }
 
 }

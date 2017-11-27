@@ -16,13 +16,12 @@ class TaskList extends Component<{}> {
 
     state = {
         tasks: [new Task(1,'Test')],
-        taskText: '',
     };
 
     render() {
 
         let tasks = this.props.tasks.map((task, key) => {
-            return <TaskComponent key={key} keyval={key} task={task} deleteMethod={() => this.props.deleteTask(key)}/>
+            return <TaskComponent key={key} keyval={key} task={task}/>
         });
 
         return (
