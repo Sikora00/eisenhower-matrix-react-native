@@ -5,7 +5,7 @@ import Task from '../shared/models/Task'
 import TaskList from '../task/task-list/TaskList'
 import store from '../task/TaskStore';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {loadListAction} from "../task/TaskActions";
+import {loadTaskListAction, removeTaskAction} from "../task/TaskActions";
 import TaskActionTypes from "../task/TaskActions";
 
 
@@ -19,7 +19,7 @@ class DashboardComponent extends Component<{}> {
 
     constructor() {
         super();
-        store.dispatch(loadListAction());
+        store.dispatch(loadTaskListAction());
         this.deleteTask = this.deleteTask.bind(this);
         this.addTask = this.addTask.bind(this);
 
@@ -95,20 +95,7 @@ class DashboardComponent extends Component<{}> {
 
     deleteTask(key) {
         let task = this.state.tasks[key];
-        fetch('https://ms-eisenhover-matrix.herokuapp.com/' + 'task/' + task.id, {
-                method: 'DELETE',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                }
-            }
-        )
-            .then(ApiUtils.checkStatus)
-            .then(response => response.json())
-            .catch(e => e)
-            .done();
-
-        store.dispatch({type: TaskActionTypes.removeSuccess, task: task, key: key});
+        store.dispatch(removeTaskAction({task: task}));
     }
 
 }

@@ -23,7 +23,7 @@ export const TaskActionTypes = {
 /**
  * Load List actions.
  */
-export function loadListAction(payload) {
+export function loadTaskListAction(payload) {
     return {
         type: TaskActionTypes.loadList,
         payload
@@ -31,7 +31,7 @@ export function loadListAction(payload) {
 
 }
 
-export function loadListFailAction(payload) {
+export function loadTaskListFailAction(payload) {
     return {
         type: TaskActionTypes.loadListFail,
         payload
@@ -39,7 +39,7 @@ export function loadListFailAction(payload) {
 
 }
 
-export function loadListSuccessAction(payload) {
+export function loadTaskListSuccessAction(payload) {
     return {
         type: TaskActionTypes.loadListSuccess,
         payload
@@ -50,7 +50,7 @@ export function loadListSuccessAction(payload) {
 /**
  * Create actions.
  */
-function createAction(payload) {
+export function createTaskAction(payload) {
     return {
         type: TaskActionTypes.create,
         payload
@@ -58,7 +58,7 @@ function createAction(payload) {
 
 }
 
-function createFailAction(payload) {
+export function createTaskFailAction(payload) {
     return {
         type: TaskActionTypes.createFail,
         payload
@@ -66,7 +66,7 @@ function createFailAction(payload) {
 
 }
 
-function createSuccessAction(payload) {
+export function createTaskSuccessAction(payload) {
     return {
         type: TaskActionTypes.createSuccess,
         payload
@@ -77,7 +77,7 @@ function createSuccessAction(payload) {
 /**
  * Update actions.
  */
-function updateAction(payload) {
+export function updateTaskAction(payload) {
     return {
         type: TaskActionTypes.update,
         payload
@@ -85,7 +85,7 @@ function updateAction(payload) {
 
 }
 
-function updateFailAction(payload) {
+export function updateTaskFailAction(payload) {
     return {
         type: TaskActionTypes.updateFail,
         payload
@@ -93,7 +93,7 @@ function updateFailAction(payload) {
 
 }
 
-function updateSuccessAction(payload) {
+export function updateTaskSuccessAction(payload) {
     return {
         type: TaskActionTypes.updateSuccess,
         payload
@@ -104,7 +104,7 @@ function updateSuccessAction(payload) {
 /**
  * Remove actions.
  */
-function removeAction(payload) {
+export function removeTaskAction(payload) {
     return {
         type: TaskActionTypes.remove,
         payload
@@ -112,7 +112,7 @@ function removeAction(payload) {
 
 }
 
-function removeFailAction(payload) {
+export function removeTaskFailAction(payload) {
     return {
         type: TaskActionTypes.removeFail,
         payload
@@ -120,7 +120,7 @@ function removeFailAction(payload) {
 
 }
 
-function removeSuccessAction(payload) {
+export function removeTaskSuccessAction(payload) {
     return {
         type: TaskActionTypes.removeSuccess,
         payload

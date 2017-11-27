@@ -26,7 +26,10 @@ export default function reducer(state = defaultState, action) {
                 loading: false
             };
         case TaskActionTypes.loadListFail:
-            return state;
+            return {
+                ...state,
+                loading: false
+            };
         case TaskActionTypes.createSuccess:
             return {
                 ...state,
@@ -35,12 +38,18 @@ export default function reducer(state = defaultState, action) {
                 ]),
                 loading: false
             };
+        case TaskActionTypes.remove:
+            return {
+                ...state,
+                loading: true
+            };
         case TaskActionTypes.removeSuccess:
             return {
                 ...state,
                 tasks: state.tasks.filter(task => {
-                    return task !== action.task
-                })
+                    return task !== action.payload.task
+                }),
+                loading: false
             };
         default:
             return state;
