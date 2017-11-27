@@ -3,8 +3,8 @@ import {
     AppRegistry,
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import TaskForm from './app/components/TaskForm'
-import DashboardComponent from "./app/components/DashboardComponent";
+import TaskForm from './app/task/TaskForm'
+import DashboardComponent from "./app/dashboard/DashboardComponent";
 
 const AppNavigator = StackNavigator({
     Home: {
@@ -30,4 +30,4 @@ export default class App extends Component<{}> {
     }
 }
 
-AppRegistry.registerComponent('AppNavigator', () => AppNavigator, 'Task');
+AppRegistry.registerComponent('AppNavigator', () => AppNavigator, 'TaskModel');

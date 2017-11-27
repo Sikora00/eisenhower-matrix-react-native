@@ -1,4 +1,4 @@
-export default class Task {
+export default class TaskModel {
     id;
     title;
     constructor(id, title) {

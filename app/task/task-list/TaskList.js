@@ -8,9 +8,9 @@ import {
     TextInput,
   ScrollView
 } from 'react-native';
-import TaskComponent from './TaskComponent';
-import ApiUtils from './ApiUtils'
-import Task from '../entities/Task'
+import TaskComponent from '../TaskComponent';
+import ApiUtils from '../../shared/ApiUtils'
+import Task from '../../shared/models/Task'
 
 class TaskList extends Component<{}> {
 

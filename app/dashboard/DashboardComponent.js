@@ -1,23 +1,25 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import ApiUtils from './ApiUtils'
-import Task from '../entities/Task'
-import TaskList from './TaskList'
-import store from '../../TaskStore';
+import ApiUtils from '../shared/ApiUtils'
+import Task from '../shared/models/Task'
+import TaskList from '../task/task-list/TaskList'
+import store from '../task/TaskStore';
 import Spinner from 'react-native-loading-spinner-overlay';
+import {loadListAction} from "../task/TaskActions";
+import TaskActionTypes from "../task/TaskActions";
 
 
 class DashboardComponent extends Component<{}> {
 
     static navigationOptions = {
-        title: 'Task Lists',
+        title: 'TaskModel Lists',
     };
 
     state = store.getState();
 
     constructor() {
         super();
-        store.dispatch({type:'PULL_TASKS'});
+        store.dispatch(loadListAction());
         this.deleteTask = this.deleteTask.bind(this);
         this.addTask = this.addTask.bind(this);
 
@@ -80,7 +82,7 @@ class DashboardComponent extends Component<{}> {
             .then((task) => {
                 taskEntity = new Task(task.id, task.title);
                 store.dispatch({
-                    type: 'ADD_TASK',
+                    type: TaskActionTypes.createSuccess,
                     task: taskEntity
                 })
             })
@@ -106,7 +108,7 @@ class DashboardComponent extends Component<{}> {
             .catch(e => e)
             .done();
 
-        store.dispatch({type: 'DELETE_TASK', task: task, key: key});
+        store.dispatch({type: TaskActionTypes.removeSuccess, task: task, key: key});
     }
 
 }

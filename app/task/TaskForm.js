@@ -54,7 +54,7 @@ export default class TaskForm extends Component<{}> {
 
 
     static navigationOptions = {
-        title: 'Add Task',
+        title: 'Add TaskModel',
     };
 
     state = {
